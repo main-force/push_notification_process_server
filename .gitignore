@@ -1,0 +1,6 @@
+.env
+*.pyc
+.idea
+.DS_STORE
+serviceAccountKey.json
+requirements.txt
