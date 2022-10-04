@@ -3,8 +3,10 @@ import os
 import dotenv
 
 from managers.fcm_token import FcmTokenManager
+from managers.db import DBManager
 import firebase_admin
 from firebase_admin import messaging
+from firebase_admin.exceptions import InvalidArgumentError, NotFoundError
 
 
 class PushNotification:
@@ -58,8 +60,17 @@ class PushNotificationManager:
     @staticmethod
     def send_push_notification(push_notification):
         message = _get_notification_message_data(push_notification)
-        response = messaging.send(message)
-        print(response)
+        try:
+            response = messaging.send(message)
+            print(f'Successfully sent message: {response}')
+        except InvalidArgumentError:
+            print(f'Invalid Argument error occurs. Delete token: {push_notification.fcm_token}')
+            FcmTokenManager.delete_devices(push_notification.fcm_token)
+        except NotFoundError:
+            print(f'Not Found error occurs. Delete token: {push_notification.fcm_token}')
+            FcmTokenManager.delete_devices(push_notification.fcm_token)
+        finally:
+            print(f'Send a push notification process complete.')
 
 
 def _get_notification_message_data(push_notification):

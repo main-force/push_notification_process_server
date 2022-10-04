@@ -17,12 +17,12 @@ class Method(Enum):
             return 'SELECT'
         elif method == Method.INSERT:
             return 'INSERT'
-        elif method == Method.DELETE:
+        elif method == Method.UPDATE:
             return 'UPDATE'
         elif method == Method.DELETE:
             return 'DELETE'
         else:
-            raise ValueError('가능한 method는 select:1, insert:2, delete:3 입니다.')
+            raise ValueError('가능한 method는 select:1, insert:2, update:3, delete:4, 입니다.')
 
 
 class DBManager:
@@ -95,6 +95,8 @@ class DBManager:
             column_str = self._get_column_str()
             value_str = self._get_value_str()
             query_str = f'{method_str} INTO {table_name_str} ({column_str}) VALUES ({value_str})'
+        elif self.request.method == Method.DELETE:
+            query_str = f'{method_str} FROM {table_name_str}'
         else:
             query_str = f'{method_str} FROM {table_name_str}'
 
@@ -208,6 +210,11 @@ class Request:
 
         return self
 
+    def delete(self, table_name):
+        self.method = Method.DELETE
+        self.table_name = table_name
+
+        return self
 
     def filter(self, **kwargs):
         """

@@ -27,6 +27,12 @@ class FcmTokenManager:
             request = Request().insert('fcm_device', user_id=user_id, fcm_token=fcm_token)
             db_manager.response(request)
 
+    @staticmethod
+    def delete_devices(fcm_token):
+        db_manager = DBManager()
+        request = Request().delete('fcm_device').filter(fcm_token=fcm_token)
+        db_manager.response(request)
+
 
 class Device:
     user_id = None
