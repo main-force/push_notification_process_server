@@ -13,6 +13,7 @@ class NotificationManager:
 
     def __init__(self, retrieve_period=DEFAULT_RETRIEVE_PERIOD):
         self.retrieve_period = retrieve_period
+        self.last_retrieve_time = time.time() - retrieve_period
 
     def run_push_notification_process(self):
         while self._is_time_to_retrieve():
@@ -24,15 +25,14 @@ class NotificationManager:
                         PushNotificationManager.send_push_notification(push_notification)
                     WebNotificationManager.set_web_notification_emailed(web_notification)
             finally:
-                print(f'Exit cycle for processing unemailed WebNotifications')
-        else:
-            time.sleep(self.must_sleep_time)
-            self._sleep()
+                current_time_str = time.strftime('%c', time.localtime(time.time()))
+                print(f'[{current_time_str}] Finish a cycle for processing unemailed WebNotifications')
+
 
     def _retrieve_unemailed_web_notification(self):
         retrieve_time = time.time()
         web_notification_list = WebNotificationManager.get_web_notification_list_unemailed()
-        self.must_sleep_time = retrieve_time
+        self.last_retrieve_time = retrieve_time
 
         return web_notification_list
 
@@ -40,9 +40,14 @@ class NotificationManager:
         current_time = time.time()
         last_retrieve_time = self.last_retrieve_time
         time_gap = current_time - last_retrieve_time
-        self.last_time_gap = time_gap
-        return self.retrieve_period <= time_gap
+
+        if self.retrieve_period > time_gap:
+            self.must_sleep_time = self.retrieve_period - time_gap
+            self._sleep()
+
+        return True
 
     def _sleep(self):
+        current_time_str = time.strftime('%c', time.localtime(time.time()))
+        print(f'[{current_time_str}] Sleep {self.must_sleep_time}s...')
         time.sleep(self.must_sleep_time)
-        self.must_sleep_time = None

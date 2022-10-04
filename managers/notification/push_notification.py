@@ -48,7 +48,7 @@ class PushNotificationManager:
         body = web_notification.description
         redirect_url = web_notification.get_object_redirect_url()
 
-        fcm_token_list = FcmTokenManager.get_device_list_from_user_id(recipient_id)
+        fcm_token_list = FcmTokenManager.get_fcm_token_list_from_user_id(recipient_id)
         push_notification_list = []
 
         for fcm_token in fcm_token_list:

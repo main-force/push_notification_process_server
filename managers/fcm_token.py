@@ -3,17 +3,15 @@ from managers.db import DBManager, Request
 
 class FcmTokenManager:
     @staticmethod
-    def get_device_list_from_user_id(user_id):
+    def get_fcm_token_list_from_user_id(user_id):
         # user_id를 가진 DB 조회
         db_manager = DBManager()
         request = Request().select('fcm_device', ['fcm_token']).filter(user_id=user_id)
         response = db_manager.response(request)
 
-        if not response:
-            raise ValueError(f'해당 user_id의 device가 없습니다: {user_id}')
-        device_list = [fcm_token[0] for fcm_token in response]
+        fcm_token_list = [fcm_token[0] for fcm_token in response]
 
-        return device_list
+        return fcm_token_list
 
     @staticmethod
     def set_device_to_db(device):

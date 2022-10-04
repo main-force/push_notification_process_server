@@ -106,8 +106,6 @@ class DBManager:
 
         query_str += ';'
 
-        print(query_str)
-
         return query_str
 
     def _get_method_str(self):

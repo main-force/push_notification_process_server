@@ -110,8 +110,8 @@ def _get_board_category(post_id):
     # DB 재 조회 시, post 삭제 되어 있을 가능성이 있으므로 error 처리 해주어야 함.
     db_manager = DBManager()
     request = Request() \
-        .select(table_name='catalog_post', columns=['board_cartegory_id']) \
-        .filter(post_id=post_id)
+        .select(table_name='catalog_post', columns=['catalog_post.board_category_id']) \
+        .filter(id=post_id)
     response = db_manager.response(request)
     if not response:
         raise ValueError('존재하지않는 post 입니다.')
