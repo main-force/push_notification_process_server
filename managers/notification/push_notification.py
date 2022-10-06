@@ -36,8 +36,7 @@ class PushNotificationManager:
             firebase_admin.initialize_app(credentials)
         self.initialized = True
 
-    @staticmethod
-    def generate_push_notification_list(web_notification):
+    def generate_push_notification_list(self, web_notification):
         """
         :param web_notification: WebNotification Object
         :return: list
@@ -57,8 +56,7 @@ class PushNotificationManager:
 
         return push_notification_list
 
-    @staticmethod
-    def send_push_notification(push_notification):
+    def send_push_notification(self, push_notification):
         message = _get_notification_message_data(push_notification)
         try:
             response = messaging.send(message)

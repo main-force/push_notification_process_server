@@ -16,18 +16,18 @@ class NotificationManager:
         self.last_retrieve_time = time.time() - retrieve_period
 
     def run_push_notification_process(self):
+        push_notification_manager = PushNotificationManager()
         while self._is_time_to_retrieve():
             try:
                 web_notification_list = self._retrieve_unemailed_web_notification()
                 for web_notification in web_notification_list:
-                    push_notification_list = PushNotificationManager.generate_push_notification_list(web_notification)
+                    push_notification_list = push_notification_manager.generate_push_notification_list(web_notification)
                     for push_notification in push_notification_list:
-                        PushNotificationManager.send_push_notification(push_notification)
+                        push_notification_manager.send_push_notification(push_notification)
                     WebNotificationManager.set_web_notification_emailed(web_notification)
             finally:
                 current_time_str = time.strftime('%c', time.localtime(time.time()))
                 print(f'[{current_time_str}] Finish a cycle for processing unemailed WebNotifications')
-
 
     def _retrieve_unemailed_web_notification(self):
         retrieve_time = time.time()
