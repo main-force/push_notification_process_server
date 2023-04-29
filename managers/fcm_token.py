@@ -28,7 +28,7 @@ class FcmTokenManager:
     @staticmethod
     def delete_devices(fcm_token):
         db_manager = DBManager()
-        request = Request().delete('fcm_device').filter(fcm_token=fcm_token)
+        request = Request().delete('fcm_device').filter(fcm_token=f"'{fcm_token}'")
         db_manager.response(request)
 
 
