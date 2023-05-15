@@ -233,7 +233,7 @@ class Request:
                     if '__' in v:
                         v_clean = v.replace('__', '.')
                     else:
-                        v_clean = f"'{v}'"
+                        v_clean = f"{v}"
                     kwargs[k] = v_clean
 
                 kwargs_clean[k_clean] = kwargs[k]
